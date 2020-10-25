@@ -1,0 +1,30 @@
+name: kvs
+args:
+    - version:
+        short: V
+        long: version
+        takes_value: false
+
+subcommands:
+    - get:
+        about: get the value in key value store
+        args:
+            - key:
+                value_name: KEY
+                takes_value: true
+    - set:
+        about: set the value in key value store
+        args:
+            - key:
+                value_name: KEY
+                takes_value: true
+            - value:
+                value_name: VALUE
+                takes_value: true
+    - rm:
+        about: remove a key value pair from kv store
+        args:
+            - key:
+                value_name: KEY
+                takes_value: true
+
