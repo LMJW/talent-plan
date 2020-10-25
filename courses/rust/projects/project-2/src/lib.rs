@@ -1,25 +1,28 @@
-use std::collections::HashMap;
+use std::path::PathBuf;
 
 pub struct KvStore {
-    store: HashMap<String, String>,
+    //
 }
 
+#[derive(Debug)]
+pub enum KvErr {}
+
+pub type Result<T> = std::result::Result<T, KvErr>;
+
 impl KvStore {
-    pub fn new() -> Self {
-        Self {
-            store: HashMap::new(),
-        }
+    pub fn open(path: impl Into<PathBuf>) -> Result<KvStore> {
+        todo!()
     }
 
-    pub fn get(&self, key: String) -> Option<String> {
-        self.store.get(&key).cloned()
+    pub fn get(&self, key: String) -> Result<Option<String>> {
+        todo!()
     }
 
-    pub fn set(&mut self, key: String, val: String) {
-        self.store.insert(key, val);
+    pub fn set(&mut self, key: String, val: String) -> Result<()> {
+        todo!()
     }
 
-    pub fn remove(&mut self, key: String) {
-        self.store.remove(&key);
+    pub fn remove(&mut self, key: String) -> Result<()> {
+        todo!()
     }
 }
