@@ -49,3 +49,11 @@ The current design might not be a good design since it needs to read multiple
 files if there are many entries. It might be a good idea to store all the
 entries in a single file, just like sqlite. However, to do that, I might need to
 redesign the file storage, which I will do it in the next revision.
+
+## Design v.1
+
+Using multiple files to store the logs might not be good idead. I am thinking to
+use the simplest possible ways to do this, which is not storing the index. We
+will replay logs ever time we reload the database.
+
+Since this is just a initial version, I believe this could work.
