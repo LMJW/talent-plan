@@ -27,4 +27,9 @@ subcommands:
             - key:
                 value_name: KEY
                 takes_value: true
-
+    - open:
+        about: open a key value store db file
+        args:
+            - file:
+                value_name: FILENAME
+                takes_value: true

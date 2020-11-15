@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate clap;
 use clap::App;
-use kvs::Result;
+use kvs::{KvStore, Result};
 
 fn main() -> Result<()> {
     // The YAML file is found relative to the current file, similar to how modules are found
@@ -13,10 +13,18 @@ fn main() -> Result<()> {
     }
 
     match matches.subcommand() {
+        ("open", Some(sub_cmd)) => todo!("unimplemented"),
         ("get", Some(sub_cmd)) => todo!("unimplemented"),
-        ("set", Some(sub_cmd)) => todo!("unimplemented"),
+        ("set", Some(sub_cmd)) => {
+            let key = sub_cmd.value_of("key").unwrap();
+            let val = sub_cmd.value_of("value").unwrap();
+            let mut store = KvStore::open("test.db")?;
+            store.set(key.to_owned(), val.to_owned()).unwrap();
+        }
         ("rm", Some(sub_cmd)) => todo!("unimplemented"),
-        _ => unimplemented!(),
+        _ => {
+            unimplemented!();
+        }
     };
 
     Ok(())

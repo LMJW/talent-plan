@@ -56,4 +56,7 @@ Using multiple files to store the logs might not be good idead. I am thinking to
 use the simplest possible ways to do this, which is not storing the index. We
 will replay logs ever time we reload the database.
 
-Since this is just a initial version, I believe this could work.
+We will use a single log file to store all the logs. We will only store "set"
+and "rm" commands since they are the only commands that changes the state of the
+KvStore.
+

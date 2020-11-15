@@ -2,20 +2,25 @@
 //!
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
-struct LogEntry {
-    logid: usize,
-    key: String,
-    value: String,
+pub struct LogEntry {
+    pub logid: usize,
+    pub operation: LogOperation,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LogPointer {
-    f_id: usize,
-    l_id: usize,
+    pub offset: usize,
+    pub size: usize,
 }
 
 impl LogPointer {
     pub fn new() -> Self {
-        Self { f_id: 0, l_id: 0 }
+        Self { offset: 0, size: 0 }
     }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub enum LogOperation {
+    Set(String, String),
+    Rm(String),
 }
