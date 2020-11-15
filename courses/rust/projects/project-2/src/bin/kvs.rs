@@ -13,7 +13,10 @@ fn main() -> Result<()> {
     }
 
     match matches.subcommand() {
-        ("open", Some(sub_cmd)) => todo!("unimplemented"),
+        ("open", Some(sub_cmd)) => {
+            let mut store = KvStore::open("test.db")?;
+            eprintln!("{:#?}", store);
+        }
         ("get", Some(sub_cmd)) => todo!("unimplemented"),
         ("set", Some(sub_cmd)) => {
             let key = sub_cmd.value_of("key").unwrap();
