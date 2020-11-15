@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 pub struct LogEntry(pub usize, pub LogOperation);
 
 #[derive(Serialize, Deserialize, Debug)]
-/// tuple (offset, size)
+/// tuple (file offset, entry size)
 pub struct LogPointer(pub usize, pub usize);
 
 impl LogPointer {

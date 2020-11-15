@@ -75,10 +75,15 @@ impl KvStore {
 
         self.fd.try_clone()?.write_all_at(&buf, 0)?;
         eprint!("{:?}", metadata);
+        eprint!("{:?}", self.index);
         Ok(())
     }
 
-    pub fn save(&self, path: impl Into<PathBuf>) -> Result<()> {
+    fn replay_log(&self) -> Result<()> {
+        todo!()
+    }
+
+    pub fn save(&self) -> Result<()> {
         self.fd.sync_all()?;
         Ok(())
     }
@@ -92,8 +97,17 @@ impl KvStore {
 
         self.total_log += 1;
         let entry_bytes = serde_cbor::to_vec(&entry)?;
+        // use 2 bytes to store the entry size using u16
+        // if entry size is bigger than 65535, then we will panic
+        assert!(
+            entry_bytes.len() < 65535,
+            "do not support entry size bigger than 64Kb"
+        );
 
-        let written_bytes = self.fd.write(&entry_bytes)?;
+        let mut buf = vec![0; 2];
+        buf.write_u16::<LittleEndian>(entry_bytes.len() as u16)?;
+        self.fd.write(&buf)?;
+        let written_bytes = self.fd.write(&entry_bytes)? + 2;
         let log_ptr = LogPointer(self.total_bytes, written_bytes);
         self.total_bytes += written_bytes;
         self.index.insert(key, log_ptr);
