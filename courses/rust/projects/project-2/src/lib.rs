@@ -88,18 +88,13 @@ impl KvStore {
     }
 
     pub fn set(&mut self, key: String, val: String) -> Result<()> {
-        let entry = LogEntry {
-            logid: self.total_log,
-            operation: LogOperation::Set(key.clone(), val),
-        };
+        let entry = LogEntry(self.total_log, LogOperation::Set(key.clone(), val));
+
         self.total_log += 1;
         let entry_bytes = serde_cbor::to_vec(&entry)?;
 
         let written_bytes = self.fd.write(&entry_bytes)?;
-        let log_ptr = LogPointer {
-            offset: self.total_bytes,
-            size: written_bytes,
-        };
+        let log_ptr = LogPointer(self.total_bytes, written_bytes);
         self.total_bytes += written_bytes;
         self.index.insert(key, log_ptr);
         self.save_metadata()?;

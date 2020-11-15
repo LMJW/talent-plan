@@ -2,20 +2,16 @@
 //!
 use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
-pub struct LogEntry {
-    pub logid: usize,
-    pub operation: LogOperation,
-}
+/// tuple(logid, log_type)
+pub struct LogEntry(pub usize, pub LogOperation);
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct LogPointer {
-    pub offset: usize,
-    pub size: usize,
-}
+/// tuple (offset, size)
+pub struct LogPointer(pub usize, pub usize);
 
 impl LogPointer {
     pub fn new() -> Self {
-        Self { offset: 0, size: 0 }
+        Self(0, 0)
     }
 }
 
