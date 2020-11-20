@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use serde_cbor;
 use std::collections::HashMap;
 use std::io::{Read, Seek, SeekFrom, Write};
+use std::ops::Deref;
 use std::os::unix::fs::FileExt;
 use std::path::PathBuf;
 
@@ -26,14 +27,26 @@ struct Metadata {
 }
 
 pub type Result<T> = std::result::Result<T, KvErr>;
+type LogSize = usize;
+
+struct Log(LogSize, LogEntry);
 
 impl KvStore {
     pub fn open(path: impl Into<PathBuf>) -> Result<KvStore> {
+        let pb = path.into();
+        let p = if pb.is_dir() {
+            let mut tmp = PathBuf::from(&pb);
+            tmp.push("test.db");
+            tmp
+        } else {
+            pb
+        };
+
         let fd = std::fs::OpenOptions::new()
             .read(true)
             .append(true)
             .create(true)
-            .open(path.into())?;
+            .open(p)?;
 
         // the first 1Kb is used to store the metadata
         // the first 4 bytes are used to identify the size of metadata structure
@@ -84,22 +97,16 @@ impl KvStore {
     }
 
     fn replay_log(&mut self) -> Result<()> {
-        let mut fd = self.fd.try_clone()?;
-        let mut buf = [0u8; 2];
         let mut offset: usize = 1024;
-        for i in 0..self.total_log {
-            fd.read_exact_at(&mut buf, offset as u64)?;
-            let mut cursor = std::io::Cursor::new(&buf);
-            let size = cursor.read_u16::<LittleEndian>()? as usize;
-
-            let mut data = vec![0u8; size];
-            fd.read_exact_at(&mut data, offset as u64 + 2)?;
-            let lp: LogEntry = serde_cbor::from_reader(&data[..])?;
+        for _ in 0..self.total_log {
+            let Log(size, lp) = self.read_log(offset)?;
             match lp.1 {
                 LogOperation::Set(key, _) => {
                     self.index.insert(key, LogPointer(offset - 1024, size + 2));
                 }
-                LogOperation::Rm(key) => todo!(),
+                LogOperation::Rm(key) => {
+                    self.index.remove(&key);
+                }
             }
             offset += size + 2;
         }
@@ -113,33 +120,74 @@ impl KvStore {
     }
 
     pub fn get(&self, key: String) -> Result<Option<String>> {
-        todo!()
+        if let Some(val) = self.index.get(&key) {
+            let entry = self.read_log_entry(val.0 + 1024)?;
+            match entry.1 {
+                LogOperation::Set(_, val) => Ok(Some(val)),
+                LogOperation::Rm(_) => Ok(None),
+            }
+        } else {
+            Ok(None)
+        }
     }
 
     pub fn set(&mut self, key: String, val: String) -> Result<()> {
         let entry = LogEntry(self.total_log, LogOperation::Set(key.clone(), val));
-
-        self.total_log += 1;
         let entry_bytes = serde_cbor::to_vec(&entry)?;
-        // use 2 bytes to store the entry size using u16
-        // if entry size is bigger than 65535, then we will panic
-        assert!(
-            entry_bytes.len() < 65535,
-            "do not support entry size bigger than 64Kb"
-        );
 
-        let mut buf = vec![0; 0];
-        buf.write_u16::<LittleEndian>(entry_bytes.len() as u16)?;
-        self.fd.write(&buf)?;
-        let written_bytes = self.fd.write(&entry_bytes)? + 2;
-        let log_ptr = LogPointer(self.total_bytes, written_bytes);
-        self.total_bytes += written_bytes;
+        let log_ptr = self.insert_log(entry_bytes)?;
         self.index.insert(key, log_ptr);
-        self.save_metadata()?;
         Ok(())
     }
 
     pub fn remove(&mut self, key: String) -> Result<()> {
-        todo!()
+        let entry = LogEntry(self.total_log, LogOperation::Rm(key.clone()));
+        let entry_bytes = serde_cbor::to_vec(&entry)?;
+
+        self.insert_log(entry_bytes)?;
+        self.index.remove(&key);
+        Ok(())
+    }
+
+    fn insert_log(&mut self, log_entry: Vec<u8>) -> Result<LogPointer> {
+        self.total_log += 1;
+        // use 2 bytes to store the entry size using u16
+        // if entry size is bigger than 65535, then we will panic
+        assert!(
+            log_entry.len() < 65535,
+            "do not support entry size bigger than 64Kb"
+        );
+
+        let mut buf = vec![0; 0];
+        buf.write_u16::<LittleEndian>(log_entry.len() as u16)?;
+        self.fd.write(&buf)?;
+        let written_bytes = self.fd.write(&log_entry)? + 2;
+        self.total_bytes += written_bytes;
+        self.save_metadata()?;
+        Ok(LogPointer(self.total_bytes, written_bytes))
+    }
+
+    fn read_log(&self, offset: usize) -> Result<Log> {
+        let size = self.read_log_entry_head(offset)? as usize;
+        let entry = self.read_log_entry_body(offset + 2, size)?;
+        Ok(Log(size, entry))
+    }
+
+    fn read_log_entry(&self, offset: usize) -> Result<LogEntry> {
+        let size = self.read_log_entry_head(offset)? as usize;
+        Ok(self.read_log_entry_body(offset + 2, size)?)
+    }
+
+    fn read_log_entry_head(&self, offset: usize) -> Result<u16> {
+        let mut buf = [0u8; 2];
+        self.fd.read_exact_at(&mut buf, offset as u64)?;
+        let mut cursor = std::io::Cursor::new(&buf);
+        Ok(cursor.read_u16::<LittleEndian>()?)
+    }
+
+    fn read_log_entry_body(&self, offset: usize, size: usize) -> Result<LogEntry> {
+        let mut data = vec![0u8; size];
+        self.fd.read_exact_at(&mut data, offset as u64)?;
+        Ok(serde_cbor::from_reader(&data[..])?)
     }
 }

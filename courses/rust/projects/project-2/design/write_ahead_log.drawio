@@ -1,1 +1,55 @@
-<mxfile modified="2020-11-19T13:08:16.076Z" host="app.diagrams.net" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36" etag="geLLCQE6-8_6Y2N71FPs" version="13.10.0" type="device"><diagram id="UkqDDxXulxUN-NViC9nC" name="Page-1">7ZhLc9MwEMc/TWbg0IwftVuOJA3l0A6PMlN66iiWagtsb5CVJubTs1IkP2LjukNSOJBLor9WsrT782qViT/PtpeCrJJroCydeA7dTvyLiee5vhPgl1LKnXJ+7u2EWHBqjGrhhv9kRnSMuuaUFS1DCZBKvmqLEeQ5i2RLI0LApm32AGn7qSsSs45wE5G0q95yKhOzi8Cp9feMx4l9suuYnoxYYyMUCaGwaUj+YuLPBYDc/cq2c5Yq51m/7Ma9+01vtTDBctkzAJbflD88JyVLjIk2mHhhirazB8hVTyFLs83wxxpsx0mhg/AWDdyz1bbuxF+x+dazLK1wK7hkyt8JI1Q9EWJrg8tZ7o9DbbcAK2vvSJZHPP1SrozjKUTrTG1Nd9td393e86+X1+Xdl08/P90592s/2py4lTcrL9Vb89Dves5sGytEp0tS8GhaTe/PNgku/2ZFImW1QRvUEpkpn7nKJzxN55CC0NP5D/qDeiEFfGeNHkd/qh6LCy5t9siE5AjV25THOWoS1EN0ZD5CwSUHpUa4HiYa5ld7BkuQEjI0IGaeakQXBsOHmoptG5Lx0yWDjElRoonp9c4NqPZNNc1Njb1vWU4ayAe+EYl51eJq6ppG/GFiY5uGzydZpfzRknLNJKFEEhVftFc+qZFq2PUMdR3vdFZKzCQWXtGD5fAc44f2Ah2znAkenUSQrSAfR7Y/SLaAdU6ZGu88jXEXygMw4zttZly3C43nB11owuMzMyK9hUPpbXSSHJylyn46KTroasGHKOyF6+kU+gwO2XYMeaejcqqaC90N66XuUZw9C8oDZsD+FPsy1L/pof60J1X6wZGwH044CcHaKB1zkHqDUWcUSyPTBCETiCEn6aJW94LfCLTivvxqdN24U41pYJsX22bnRdlsfcRtoJtUmLX4jUlZmlKRrCWgVC/nClTgdyc3viLGzHNs26zfHUKhgLWI2ICjQlOJEhEzOeRQM6Hy3CBZgqVE8sd20XlYSq50AlrkdqIuMBERdAQl4SAkv3tzM06pZmT/Ra06Bg8rm3H0GvvzStEINRGRibzrDeWZYxRSvttOD57Tkx76KqnjHIoHi7vr/A/88wJ/9lcD3ylB8I4sCc+L/sqiFw08OUAS5bx7bwwiT1zFOtFthn7vnvaQwgaPLiGnrUWMOPqrIuHZ5cWuaDgACmGwVyKEQQeFoIcE98UuU+/xro6+8JxXWOo5+m70evRV6IpLmbIF5SQfLFyPcyty//VrUfhmL/pnZ9Nu/N2+VHAavFD8Z0DLP7gMzz/MPuv7TASU5/HfoGD4ivLvUeD54UgGzv+UAWzWfyxq08bfs/7iFw==</diagram></mxfile>
+<mxfile modified="2020-11-20T00:10:54.351Z" host="1170db29-60b5-4644-8f5b-9371c20fe043" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.1 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="95LQJMF2WgYsaQcdmVwW" version="13.6.5">
+    <diagram id="UkqDDxXulxUN-NViC9nC" name="Page-1">
+        <mxGraphModel dx="692" dy="955" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <object label="&lt;font style=&quot;font-size: 17px&quot;&gt;&lt;b&gt;Write ahead log&lt;/b&gt;&lt;/font&gt;" stencilType="document" id="YW_iXGMyYTQzQY0_u3cw-1">
+                    <mxCell style="shape=mxgraph.basic.document;whiteSpace=wrap;html=1;strokeColor=#000000;strokeWidth=2;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fillColor=#E6E6E6;" parent="1" vertex="1">
+                        <mxGeometry x="280" y="80" width="320" height="530" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="&lt;div&gt;Metadata section&lt;/div&gt;&lt;div&gt;1024Bytes&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" stencilType="generic-component" id="YW_iXGMyYTQzQY0_u3cw-3">
+                    <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
+                        <mxGeometry x="300" y="110" width="235" height="60" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="&lt;div style=&quot;font-size: 16px&quot;&gt;&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;log entries&lt;br&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" stencilType="ext" id="YW_iXGMyYTQzQY0_u3cw-4">
+                    <mxCell style="shape=ext;double=1;rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;strokeWidth=2;" parent="1" vertex="1">
+                        <mxGeometry x="300" y="190" width="240" height="350" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="" stencilType="generic-channel" id="YW_iXGMyYTQzQY0_u3cw-12">
+                    <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;jettySize=auto;orthogonalLoop=1;fontSize=20;fontStyle=1;" parent="1" source="YW_iXGMyYTQzQY0_u3cw-6" target="YW_iXGMyYTQzQY0_u3cw-11" edge="1">
+                        <mxGeometry relative="1" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="Log Entry" stencilType="card" id="YW_iXGMyYTQzQY0_u3cw-6">
+                    <mxCell style="verticalLabelPosition=middle;verticalAlign=middle;html=1;strokeWidth=2;shape=card;whiteSpace=wrap;size=20;arcSize=12;labelPosition=center;align=center;" parent="1" vertex="1">
+                        <mxGeometry x="310" y="200" width="220" height="60" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="Log Entry" stencilType="card" id="YW_iXGMyYTQzQY0_u3cw-10">
+                    <mxCell style="verticalLabelPosition=middle;verticalAlign=middle;html=1;strokeWidth=2;shape=card;whiteSpace=wrap;size=20;arcSize=12;labelPosition=center;align=center;" parent="1" vertex="1">
+                        <mxGeometry x="310" y="270" width="220" height="60" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="&lt;b&gt;contains&lt;/b&gt;" stencilType="annotation_2" id="YW_iXGMyYTQzQY0_u3cw-11">
+                    <mxCell style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=center;verticalAlign=bottom;labelPosition=center;verticalLabelPosition=top;" parent="1" vertex="1">
+                        <mxGeometry x="650" y="165" width="50" height="130" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="&lt;div&gt;Header (2 Bytes)&lt;/div&gt;&lt;div&gt;LittleEdian&lt;br&gt;&lt;/div&gt;" stencilType="generic-component" id="YW_iXGMyYTQzQY0_u3cw-13">
+                    <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
+                        <mxGeometry x="690" y="177.5" width="120" height="45" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="&lt;div&gt;Body&lt;br&gt;&lt;/div&gt;&lt;div&gt;COBR encoding&lt;br&gt;&lt;/div&gt;" stencilType="generic-component" id="YW_iXGMyYTQzQY0_u3cw-14">
+                    <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
+                        <mxGeometry x="690" y="236" width="120" height="48" as="geometry"/>
+                    </mxCell>
+                </object>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
