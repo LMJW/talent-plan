@@ -1,6 +1,6 @@
-<mxfile modified="2020-11-20T00:10:54.351Z" host="1170db29-60b5-4644-8f5b-9371c20fe043" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.1 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="95LQJMF2WgYsaQcdmVwW" version="13.6.5">
+<mxfile modified="2020-11-21T23:19:25.239Z" host="b7603b6c-264c-4ce9-8fb6-8f5760f05238" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.51.1 Chrome/83.0.4103.122 Electron/9.3.3 Safari/537.36" etag="YJl_fRe5qsEd_SRGcqLv" version="13.6.5">
     <diagram id="UkqDDxXulxUN-NViC9nC" name="Page-1">
-        <mxGraphModel dx="692" dy="955" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="831" dy="955" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -9,6 +9,9 @@
                         <mxGeometry x="280" y="80" width="320" height="530" as="geometry"/>
                     </mxCell>
                 </object>
+                <mxCell id="5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="YW_iXGMyYTQzQY0_u3cw-3" target="2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
                 <object label="&lt;div&gt;Metadata section&lt;/div&gt;&lt;div&gt;1024Bytes&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" stencilType="generic-component" id="YW_iXGMyYTQzQY0_u3cw-3">
                     <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
                         <mxGeometry x="300" y="110" width="235" height="60" as="geometry"/>
@@ -47,6 +50,21 @@
                 <object label="&lt;div&gt;Body&lt;br&gt;&lt;/div&gt;&lt;div&gt;COBR encoding&lt;br&gt;&lt;/div&gt;" stencilType="generic-component" id="YW_iXGMyYTQzQY0_u3cw-14">
                     <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" parent="1" vertex="1">
                         <mxGeometry x="690" y="236" width="120" height="48" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="&lt;b&gt;contains&lt;/b&gt;" stencilType="annotation_2" id="2">
+                    <mxCell style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=center;verticalAlign=bottom;labelPosition=center;verticalLabelPosition=top;flipH=1;" vertex="1" parent="1">
+                        <mxGeometry x="200" y="75" width="50" height="130" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="&lt;div&gt;Header (4 Bytes)&lt;/div&gt;&lt;div&gt;LittleEdian&lt;br&gt;&lt;/div&gt;" stencilType="generic-component" id="3">
+                    <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+                        <mxGeometry x="90" y="87.5" width="120" height="45" as="geometry"/>
+                    </mxCell>
+                </object>
+                <object label="&lt;div&gt;Body&lt;br&gt;&lt;/div&gt;&lt;div&gt;COBR encoding&lt;br&gt;&lt;/div&gt;" stencilType="generic-component" id="4">
+                    <mxCell style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+                        <mxGeometry x="90" y="146" width="120" height="48" as="geometry"/>
                     </mxCell>
                 </object>
             </root>

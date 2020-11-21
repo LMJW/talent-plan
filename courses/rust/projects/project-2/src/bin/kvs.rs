@@ -15,23 +15,34 @@ fn app() -> Result<()> {
     match matches.subcommand() {
         ("open", Some(sub_cmd)) => {
             let store = KvStore::open("test.db")?;
-            eprintln!("{:#?}", store);
         }
         ("get", Some(sub_cmd)) => {
             let key = sub_cmd.value_of("key").unwrap();
             let store = KvStore::open("test.db")?;
-            eprintln!("{:#?}", store.get(key.to_owned()).unwrap());
+            eprintln!("{:#?}", store);
+
+            if let Ok(res) = store.get(key.to_owned()) {
+                if let Some(r) = res {
+                    println!("{}", r);
+                } else {
+                    println!("Key not found");
+                }
+            }
         }
         ("set", Some(sub_cmd)) => {
             let key = sub_cmd.value_of("key").unwrap();
             let val = sub_cmd.value_of("value").unwrap();
+
             let mut store = KvStore::open("test.db")?;
+            eprintln!("{:#?}", store);
+
             store.set(key.to_owned(), val.to_owned()).unwrap();
+            eprintln!("{:#?}", store);
         }
         ("rm", Some(sub_cmd)) => {
             let key = sub_cmd.value_of("key").unwrap();
             let mut store = KvStore::open("test.db")?;
-            store.remove(key.to_owned()).unwrap();
+            store.remove(key.to_owned())?;
         }
         _ => {
             unimplemented!();
@@ -44,6 +55,9 @@ fn app() -> Result<()> {
 fn main() {
     std::process::exit(match app() {
         Ok(_) => 0,
-        Err(_) => 1,
+        Err(e) => {
+            print!("{}", e);
+            1
+        }
     })
 }

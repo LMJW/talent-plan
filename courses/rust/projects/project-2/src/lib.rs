@@ -7,7 +7,7 @@ use std::ops::Deref;
 use std::os::unix::fs::FileExt;
 use std::path::PathBuf;
 
-mod error;
+pub mod error;
 mod txlog;
 use error::KvErr;
 use txlog::{LogEntry, LogOperation, LogPointer};
@@ -91,8 +91,8 @@ impl KvStore {
         buf[4..md.len() + 4].clone_from_slice(&md);
 
         self.fd.try_clone()?.write_all_at(&buf, 0)?;
-        eprint!("{:?}", metadata);
-        eprint!("{:?}", self.index);
+        // eprint!("{:?}", metadata);
+        // eprint!("{:?}", self.index);
         Ok(())
     }
 
@@ -145,8 +145,10 @@ impl KvStore {
         let entry_bytes = serde_cbor::to_vec(&entry)?;
 
         self.insert_log(entry_bytes)?;
-        self.index.remove(&key);
-        Ok(())
+        match self.index.remove(&key) {
+            Some(_) => Ok(()),
+            None => Err(KvErr::KeyNotExistError),
+        }
     }
 
     fn insert_log(&mut self, log_entry: Vec<u8>) -> Result<LogPointer> {
@@ -157,14 +159,14 @@ impl KvStore {
             log_entry.len() < 65535,
             "do not support entry size bigger than 64Kb"
         );
-
+        let offset = self.total_bytes;
         let mut buf = vec![0; 0];
         buf.write_u16::<LittleEndian>(log_entry.len() as u16)?;
         self.fd.write(&buf)?;
         let written_bytes = self.fd.write(&log_entry)? + 2;
         self.total_bytes += written_bytes;
         self.save_metadata()?;
-        Ok(LogPointer(self.total_bytes, written_bytes))
+        Ok(LogPointer(offset, written_bytes))
     }
 
     fn read_log(&self, offset: usize) -> Result<Log> {
