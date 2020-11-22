@@ -23,8 +23,8 @@ impl From<serde_cbor::error::Error> for KvErr {
 impl fmt::Display for KvErr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            KvErr::IOError(e) => write!(f, "{}", e),
-            KvErr::ParseError(e) => write!(f, "{}", e),
+            KvErr::IOError(e) => write!(f, "IOError: {}", e),
+            KvErr::ParseError(e) => write!(f, "ParseError: {}", e),
             KvErr::KeyNotExistError => write!(f, "Key not found"),
         }
     }

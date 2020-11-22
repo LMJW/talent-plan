@@ -151,6 +151,30 @@ impl KvStore {
         }
     }
 
+    pub fn compact(&mut self) -> Result<()> {
+        let mut new_index = HashMap::<String, LogPointer>::new();
+        let mut new_total_log = 0usize;
+        let mut new_total_byte = 0usize;
+        let mut logs = Vec::<u8>::new();
+        for (key, val) in self.index.iter() {
+            let LogPointer(old_offset, old_size) = val;
+            new_total_log += 1;
+            let mut buf = vec![0u8; *old_size];
+
+            self.fd.read_exact_at(&mut buf, *old_offset as u64)?;
+            new_index.insert(key.to_owned(), LogPointer(new_total_byte, *old_size));
+            logs.append(&mut buf);
+            new_total_byte += old_size;
+        }
+        self.index = new_index;
+        self.total_log = new_total_log;
+        self.total_bytes = new_total_byte;
+
+        self.save_metadata()?;
+        self.fd.write_at(&logs, 1024)?;
+        Ok(())
+    }
+
     fn insert_log(&mut self, log_entry: Vec<u8>) -> Result<LogPointer> {
         self.total_log += 1;
         // use 2 bytes to store the entry size using u16
@@ -167,6 +191,12 @@ impl KvStore {
         self.total_bytes += written_bytes;
         self.save_metadata()?;
         Ok(LogPointer(offset, written_bytes))
+    }
+
+    fn read_log_pointer(&self, log_ptr: &LogPointer) -> Result<Log> {
+        let LogPointer(offset, size) = log_ptr;
+        let entry = self.read_log_entry_body(offset + 2, *size)?;
+        Ok(Log(*size, entry))
     }
 
     fn read_log(&self, offset: usize) -> Result<Log> {

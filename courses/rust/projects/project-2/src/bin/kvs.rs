@@ -12,13 +12,12 @@ fn app() -> Result<()> {
         println!("kvs version: {}", std::env!("CARGO_PKG_VERSION"))
     }
 
+    let mut store = KvStore::open("test.db")?;
+
     match matches.subcommand() {
-        ("open", Some(sub_cmd)) => {
-            let store = KvStore::open("test.db")?;
-        }
+        ("open", Some(sub_cmd)) => {}
         ("get", Some(sub_cmd)) => {
             let key = sub_cmd.value_of("key").unwrap();
-            let store = KvStore::open("test.db")?;
             eprintln!("{:#?}", store);
 
             if let Ok(res) = store.get(key.to_owned()) {
@@ -32,8 +31,6 @@ fn app() -> Result<()> {
         ("set", Some(sub_cmd)) => {
             let key = sub_cmd.value_of("key").unwrap();
             let val = sub_cmd.value_of("value").unwrap();
-
-            let mut store = KvStore::open("test.db")?;
             eprintln!("{:#?}", store);
 
             store.set(key.to_owned(), val.to_owned()).unwrap();
@@ -41,14 +38,14 @@ fn app() -> Result<()> {
         }
         ("rm", Some(sub_cmd)) => {
             let key = sub_cmd.value_of("key").unwrap();
-            let mut store = KvStore::open("test.db")?;
             store.remove(key.to_owned())?;
         }
         _ => {
             unimplemented!();
         }
     };
-
+    store.compact()?;
+    eprintln!("{:#?}", store);
     Ok(())
 }
 

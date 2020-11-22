@@ -60,3 +60,8 @@ We will use a single log file to store all the logs. We will only store "set"
 and "rm" commands since they are the only commands that changes the state of the
 KvStore.
 
+Compaction is also using the simplest design, which is compact everytime when
+exit the database, and it will go over all the logs and recreate now log
+pointers and disgard the unused logs.
+    - metadata needs to be recreated and saved
+    - log entries needs to be recreated and saved
