@@ -44,8 +44,8 @@ impl KvStore {
 
         let fd = std::fs::OpenOptions::new()
             .read(true)
-            .append(true)
             .create(true)
+            .write(true)
             .open(p)?;
 
         // the first 1Kb is used to store the metadata
@@ -78,7 +78,7 @@ impl KvStore {
         Ok(kvstore)
     }
 
-    fn save_metadata(&self) -> Result<()> {
+    fn save_metadata(&mut self) -> Result<()> {
         let metadata = Metadata {
             total_log: self.total_log,
             total_bytes: self.total_bytes,
@@ -90,14 +90,13 @@ impl KvStore {
 
         buf[4..md.len() + 4].clone_from_slice(&md);
 
-        self.fd.try_clone()?.write_all_at(&buf, 0)?;
-        // eprint!("{:?}", metadata);
-        // eprint!("{:?}", self.index);
+        self.fd.write_all_at(&buf, 0)?;
         Ok(())
     }
 
     fn replay_log(&mut self) -> Result<()> {
         let mut offset: usize = 1024;
+
         for _ in 0..self.total_log {
             let Log(size, lp) = self.read_log(offset)?;
             match lp.1 {
@@ -152,6 +151,9 @@ impl KvStore {
     }
 
     pub fn compact(&mut self) -> Result<()> {
+        let mut data = Vec::new();
+        self.fd.read_to_end(&mut data)?;
+
         let mut new_index = HashMap::<String, LogPointer>::new();
         let mut new_total_log = 0usize;
         let mut new_total_byte = 0usize;
@@ -161,7 +163,7 @@ impl KvStore {
             new_total_log += 1;
             let mut buf = vec![0u8; *old_size];
 
-            self.fd.read_exact_at(&mut buf, *old_offset as u64)?;
+            self.fd.read_exact_at(&mut buf, *old_offset as u64 + 1024)?;
             new_index.insert(key.to_owned(), LogPointer(new_total_byte, *old_size));
             logs.append(&mut buf);
             new_total_byte += old_size;
@@ -172,6 +174,7 @@ impl KvStore {
 
         self.save_metadata()?;
         self.fd.write_at(&logs, 1024)?;
+        self.fd.set_len(1024 + logs.len() as u64)?;
         Ok(())
     }
 
@@ -183,14 +186,14 @@ impl KvStore {
             log_entry.len() < 65535,
             "do not support entry size bigger than 64Kb"
         );
-        let offset = self.total_bytes;
+        let offset = self.total_bytes + 1024;
         let mut buf = vec![0; 0];
         buf.write_u16::<LittleEndian>(log_entry.len() as u16)?;
-        self.fd.write(&buf)?;
-        let written_bytes = self.fd.write(&log_entry)? + 2;
+        self.fd.write_at(&buf, offset as u64)?;
+        let written_bytes = self.fd.write_at(&log_entry, offset as u64 + 2)? + 2;
         self.total_bytes += written_bytes;
         self.save_metadata()?;
-        Ok(LogPointer(offset, written_bytes))
+        Ok(LogPointer(offset - 1024, written_bytes))
     }
 
     fn read_log_pointer(&self, log_ptr: &LogPointer) -> Result<Log> {

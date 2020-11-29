@@ -18,7 +18,6 @@ fn app() -> Result<()> {
         ("open", Some(sub_cmd)) => {}
         ("get", Some(sub_cmd)) => {
             let key = sub_cmd.value_of("key").unwrap();
-            eprintln!("{:#?}", store);
 
             if let Ok(res) = store.get(key.to_owned()) {
                 if let Some(r) = res {
@@ -31,10 +30,8 @@ fn app() -> Result<()> {
         ("set", Some(sub_cmd)) => {
             let key = sub_cmd.value_of("key").unwrap();
             let val = sub_cmd.value_of("value").unwrap();
-            eprintln!("{:#?}", store);
 
             store.set(key.to_owned(), val.to_owned()).unwrap();
-            eprintln!("{:#?}", store);
         }
         ("rm", Some(sub_cmd)) => {
             let key = sub_cmd.value_of("key").unwrap();
@@ -45,7 +42,6 @@ fn app() -> Result<()> {
         }
     };
     store.compact()?;
-    eprintln!("{:#?}", store);
     Ok(())
 }
 
