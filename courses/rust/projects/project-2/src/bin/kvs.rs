@@ -41,7 +41,6 @@ fn app() -> Result<()> {
             unimplemented!();
         }
     };
-    store.compact()?;
     Ok(())
 }
 

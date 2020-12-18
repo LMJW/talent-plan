@@ -136,6 +136,8 @@ impl KvStore {
 
         let log_ptr = self.insert_log(entry_bytes)?;
         self.index.insert(key, log_ptr);
+
+        self.compact()?;
         Ok(())
     }
 
@@ -224,5 +226,12 @@ impl KvStore {
         let mut data = vec![0u8; size];
         self.fd.read_exact_at(&mut data, offset as u64)?;
         Ok(serde_cbor::from_reader(&data[..])?)
+    }
+}
+
+impl Drop for KvStore {
+    fn drop(&mut self) {
+        // println!("Now running the compaction");
+        self.compact().expect("compact completed without error");
     }
 }
